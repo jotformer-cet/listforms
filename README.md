@@ -1,2 +1,2 @@
-# listforms
-This project simply list Jotform forms by providing the API Key. An API Key with Read Only permission is enough. 
+# List Forms (Jotform)
+This project lists Jotform forms by providing the API Key. An API Key with Read-only permission is enough. 
