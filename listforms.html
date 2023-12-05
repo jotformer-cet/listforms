@@ -1,0 +1,197 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+		<script type="text/javascript">
+			var api = 'https://api.jotform.com//user/forms?apikey';
+			var key = '';
+			var orderBy = 'id';
+			var extra = '';
+
+			function getForms()
+			{
+				apiURL = api + "=" + key + extra;
+				var xmlHttp = new XMLHttpRequest();
+				xmlHttp.open( "GET", apiURL, false );
+				xmlHttp.send( null );
+				return xmlHttp.responseText;
+			}
+//http://eu-api.jotform.com//user/forms?apikey
+			function displayForms()
+			{
+				key = document.getElementById('input_4').value;
+				extra = '&limit=2000&orderby=id';
+				var response = getForms();
+
+				//We must parse the forms list
+				var formsData = JSON.parse(response);
+
+				 //Lets make sure that there is no issues getting back data..
+				if(formsData['responseCode'] === 301) //EU server?
+				{
+					api = formsData['location'] + '?apikey';
+					displayForms();
+					return false;
+				}
+				else if(formsData['responseCode'] !== 200)
+				{
+					alert('There was an issue getting your list' + formsData['message']); return false;
+				}
+
+				var innerH = '';
+
+				//Lets spin da' wheels
+				for(i = 0; i < formsData['resultSet']['count']; i++)
+				{
+					var fd = formsData['content'][i];
+					if(fd.last_submission === null) { fd.last_submission = "No New Submissions"; }
+					if(fd.status !== 'DELETED')
+					{ 
+						innerH += '<div style="margin-bottom: 15px;border-bottom: 1px dotted #555;padding-bottom: 10px;"><p style="font-weight: bold;display:block;margin: 0;">' + fd.title + '</p><a target="_blank" style="margin-left: 12px;font-size: 13px;" href="' + fd.url + ' ">' + fd.url + '</a><p style="display:block;margin: 0;margin-left: 12px;font-size: 13px;"><b>Total Submissions: </b>'+ fd.count + ' | <b>New Submissions: &nbsp; </b>' + fd.new + ' | <b>Last Submission Made: &nbsp; </b>' + fd.folderID + ' </p></div>';
+					}
+				}
+
+				document.getElementById('cid_6').innerHTML = innerH;
+
+				return false;
+			}
+		</script>
+		<script src="https://cdn.jotfor.ms/static/prototype.forms.js" type="text/javascript"></script>
+		<script src="https://cdn.jotfor.ms/static/jotform.forms.js?3.3.15966" type="text/javascript"></script>
+		<script type="text/javascript">
+		   JotForm.setConditions([{"type":"field","link":"Any","terms":[{"field":"4","operator":"isEmpty","value":""}],"action":[{"field":"5","visibility":"Hide"}],"id":1425594418907,"priority":0,"index":0}]);
+		   JotForm.init();
+		</script>
+		<link href="https://cdn.jotfor.ms/static/formCss.css" rel="stylesheet" type="text/css">
+		<link type="text/css" rel="stylesheet" href="https://cdn.jotfor.ms/css/styles/nova.css">
+		<link type="text/css" media="print" rel="stylesheet" href="https://cdn.jotfor.ms/css/printForm.css">
+		<style type="text/css">
+			.form-label-left{
+				width:150px !important;
+			}
+			.form-line{
+				padding-top:12px;
+				padding-bottom:12px;
+			}
+			.form-label-right{
+				width:150px !important;
+			}
+			.form-all{
+				width:690px;
+				color:#555 !important;
+				font-family:"Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, sans-serif;
+				font-size:14px;
+			}
+			.form-all {
+			    width: 100%;
+			    display: block;
+			    max-width: 690px;
+			    margin: 0 auto;
+			    border: 1px dotted #555;
+			    padding: 15px;
+			}
+			input#input_4 {
+			    line-height: 24px;
+			    height: auto;
+			    padding: 10px;
+			    width: 265px;
+			}
+			button#input_5 {
+			    color: #ffffff !important;
+			    background: #e09c5f;
+			    box-shadow: none;
+			    text-shadow: none;
+			    width: 265px;
+			    border: none;
+			    height: 35px;
+			    font-size: 16px;
+			    cursor: pointer;
+			}
+		</style>
+		<title>Get List of Forms</title>
+		<link rel="shortcut icon" href="https://cdn.jotfor.ms/favicon.ico">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<form novalidate="true" class="jotform-form" accept-charset="utf-8">
+		  <div class="form-all">
+			<ul class="form-section">
+			  <li id="cid_1" class="form-input-wide" data-type="control_head">
+				<div class="form-header-group">
+				  <div class="header-text httal htvam">
+					<h2 id="header_1" class="form-header">
+					  List Forms
+					</h2>
+				  </div>
+				</div>
+			  </li>
+			  <li class="form-line" data-type="control_text" id="id_3">
+				<div id="cid_3" class="form-input-wide">
+				  <div id="text_3" class="form-html">
+				  	<p>Retrieve a list of all forms in your account and the URL to them. The limit is currently set to 1000-2000 forms. 
+					</p>
+
+					<p>This works by providing your API Key. The API Key can be created with read-only access. There's no need for a full access when using this tool.</p>
+					<ul>
+					  <li>
+						<b>
+						  1.
+						</b>
+						Go to
+						<a href="https://www.jotform.com/myaccount/api" target="_blank">My Account</a>
+					  </li>
+					  <li>
+						<b>
+						  2.
+						</b>
+						Navigate to API Section
+					  </li>
+					  <li>
+						<b>
+						  3.
+						</b>
+						Create a new API Key
+					  </li>
+					</ul>
+				  </div>
+				</div>
+			  </li>
+			  <li class="form-line jf-required form-line-active" data-type="control_textbox" id="id_4">
+				<label class="form-label form-label-left form-label-auto" id="label_4" for="input_4">
+				  API Key
+				  <span class="form-required">
+					*
+				  </span>
+				</label>
+				<div id="cid_4" class="form-input jf-required">
+				  <input class=" form-textbox validate[required]" data-type="input-textbox" id="input_4" name="q4_apiKey" size="20" type="text">
+				</div>
+			  </li>
+			  <li style="display: none;" class="form-line form-field-hidden" data-type="control_button" id="id_5">
+				<div id="cid_5" class="form-input-wide">
+				  <div style="margin-left:156px" class="form-buttons-wrapper">
+					<button id="input_5" class="form-button" onclick="displayForms(); return false;">
+					  Submit
+					</button>					
+				  </div>
+				</div>
+			  </li>
+			  <li class="form-line" data-type="control_text" id="id_3">
+				<div id="cid_3" class="form-input-wide">
+				  <div id="text_3" class="form-html">
+					<p>Thank you to my former colleague, Ben who created this script! Re-created it to use secure resources!</p>
+				</div>
+			</div>
+		</li>
+			  
+			  <li id="id_6">
+				<div id="cid_6" class="form-input-wide">
+				</div>
+			  </li>
+			  <li style="display:none">
+				Should be Empty:
+				<input name="website" type="text">
+			  </li>
+			</ul>
+		  </div>
+		</form>
+	
+</body></html>
